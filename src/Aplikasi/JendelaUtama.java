@@ -266,13 +266,25 @@ public class JendelaUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTglLahirActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-     if (currentRow < mahasiswa.size()-1){
-                 --currentRow;
-                 btnPrev.setEnabled(true);
-                 }else {
-                 btnNext.setEnabled(false);
-                 }
-                 bindData();
+     if (currentRow < mahasiswa.size() - 1) {
+    currentRow++;
+    btnPrev.setEnabled(true); 
+} else {
+    btnNext.setEnabled(false); 
+}
+
+
+if (currentRow <= 0) {
+    btnPrev.setEnabled(false);
+}
+
+
+if (currentRow < mahasiswa.size() - 1) {
+    btnNext.setEnabled(true);
+}
+
+bindData();
+
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void txtTmpLahirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTmpLahirActionPerformed
@@ -280,13 +292,26 @@ public class JendelaUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTmpLahirActionPerformed
 
     private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
-     if (currentRow < mahasiswa.size()-1){
-                 ++currentRow;
-                 btnPrev.setEnabled(true);
-                 }else {
-                 btnNext.setEnabled(false);
-                 }
-                 bindData();
+    
+if (currentRow < mahasiswa.size() - 1) {
+    ++currentRow;
+    btnPrev.setEnabled(true); 
+} else {
+    btnNext.setEnabled(false); 
+}
+
+
+if (currentRow > 0) {
+    --currentRow;
+    btnNext.setEnabled(true); 
+} else {
+    btnPrev.setEnabled(false); 
+}
+
+
+bindData();
+
+
     }//GEN-LAST:event_btnPrevActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -403,40 +428,50 @@ public class JendelaUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-    if (btnDelete.getText().equals("Delete")){
-             int dialog = JOptionPane.showConfirmDialog(this, "Apakah Anda Yakin Akan Menghapus Data Ini ?","Konfirmasi", JOptionPane.YES_NO_OPTION);
-             MahasiswaManager mhsmgr = new MahasiswaManager();
+    if (btnDelete.getText().equals("Delete")) {
+    int dialog = JOptionPane.showConfirmDialog(this, "Apakah Anda Yakin Akan Menghapus Data Ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+    MahasiswaManager mhsmgr = new MahasiswaManager();
+    Mahasiswa m = mahasiswa.get(currentRow);
 
-             Mahasiswa m = mahasiswa.get(currentRow);
+    if (dialog == JOptionPane.YES_OPTION) {
+        if (mhsmgr.Delete(m) > 0) {
+            loadData(); 
+            
+            currentRow = Math.max(0, currentRow - 1); 
+            bindData();
 
-                if (dialog == JOptionPane.YES_NO_OPTION) {
-                    if (mhsmgr.Delete(m)>0){
-                        loadData();
-                        currentRow = currentRow - 1;
-                        bindData();
-                        JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus","Informasi", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Data Gagal Dihapus","Informasi", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-             } else if (btnDelete.getText().equals("Batal")) {
-                loadData();
-                bindData();
-                btnNew.setText("Baru");
-                btnEdit.setText("Edit");
-                btnDelete.setText("Hapus");
-                btnEdit.setEnabled(true);
-                btnNew.setEnabled(true);
-                btnNext.setEnabled(true);
-                btnPrev.setEnabled(true);
-                txtNoBP.setEditable(false);
-                txtNama.setEditable(false);
-                txtTmpLahir.setEditable(false);
-                txtTglLahir.setEditable(false);
-                txtAlamat.setEditable(false);
-                txtPhone.setEditable(false);
-                txtAsalSekolah.setEditable(false);
-             }
+            JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+
+           
+            btnNext.setEnabled(currentRow < mahasiswa.size() - 1);
+            btnPrev.setEnabled(currentRow > 0);
+        } else {
+            JOptionPane.showMessageDialog(this, "Data Gagal Dihapus", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+} else if (btnDelete.getText().equals("Batal")) {
+    loadData(); 
+    bindData();
+
+    
+    btnNew.setText("Baru");
+    btnEdit.setText("Edit");
+    btnDelete.setText("Delete");
+    btnEdit.setEnabled(true);
+    btnNew.setEnabled(true);
+    btnNext.setEnabled(currentRow < mahasiswa.size() - 1);
+    btnPrev.setEnabled(currentRow > 0);
+
+    
+    txtNoBP.setEditable(false);
+    txtNama.setEditable(false);
+    txtTmpLahir.setEditable(false);
+    txtTglLahir.setEditable(false);
+    txtAlamat.setEditable(false);
+    txtPhone.setEditable(false);
+    txtAsalSekolah.setEditable(false);
+}
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
